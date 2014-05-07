@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger>
+
+    <dataSet config="main" >
+        <source path="/home/mario/projetos/csd/basedroid/app/src/instrumentTest/res" />
+        <source path="/home/mario/projetos/csd/basedroid/app/build/res/rs/test/debug" />
+        <source path="/home/mario/projetos/csd/basedroid/app/build/res/generated/test/debug" />
+    </dataSet>
+
+</merger>
