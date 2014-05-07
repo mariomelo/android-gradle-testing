@@ -1,0 +1,48 @@
+apply plugin: "java"
+apply plugin: "jacoco"
+
+repositories {
+  mavenCentral()
+}
+  
+dependencies {
+    compile 'com.google.android:android:4.1.1.4'
+    testCompile 'junit:junit:4.11'
+    testCompile 'org.mockito:mockito-core:1.9.5'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+        }
+        resources {
+            srcDir 'res'
+        }
+    }
+}
+
+sourceSets.test.output.resourcesDir = sourceSets.test.output.classesDir
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination "${buildDir}/jacocoHtml"
+    }
+}
+
+sourceSets.test.runtimeClasspath += files('./build/source/r/debug')
+
+test {
+    beforeSuite { suite ->
+        println "**********************************"
+        println "Iniciando testes ${suite}..."
+        new File('./build/source/r').eachDirRecurse{
+            println it
+        }
+    }
+    afterSuite { desc, result -> 
+        println "O teste ${desc.name} [${desc.className}] retornou: ${result.resultType}"
+    }
+  }
