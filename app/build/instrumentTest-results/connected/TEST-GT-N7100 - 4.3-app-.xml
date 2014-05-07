@@ -1,7 +1,0 @@
-<?xml version='1.0' encoding='UTF-8' ?>
-<testsuite name="course.labs.todomanager.test.TestCancel" tests="3" failures="0" errors="0" time="67.573" timestamp="2014-05-07T21:48:32" hostname="localhost">
-  <properties device="GT-N7100 - 4.3" flavor="" project="app" />
-  <testcase name="testRun" classname="course.labs.todomanager.test.TestCancel" time="23.405" />
-  <testcase name="testRun" classname="course.labs.todomanager.test.TestReset" time="15.896" />
-  <testcase name="testRun" classname="course.labs.todomanager.test.TestSubmit" time="28.244" />
-</testsuite>

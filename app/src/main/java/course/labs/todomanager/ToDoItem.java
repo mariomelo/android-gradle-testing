@@ -35,7 +35,7 @@ public class ToDoItem {
 	private Status mStatus = Status.NOTDONE;
 	private Date mDate = new Date();
 
-	ToDoItem(String title, Priority priority, Status status, Date date) {
+	public ToDoItem(String title, Priority priority, Status status, Date date) {
 		this.mTitle = title;
 		this.mPriority = priority;
 		this.mStatus = status;
