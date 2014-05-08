@@ -3,10 +3,13 @@ machine:
   java:
     version: oraclejdk6
 
+dependencies:
+  pre:
+    - mv ci.properties local.properties
+    
 ## Customize test commands
 test:
   pre:
-    - mv ci.properties local.properties
     - echo y | android update sdk --no-ui --filter "platform-tools"
     - echo y | android update sdk --no-ui --filter $(android list sdk | grep "Android SDK Build-tools" | sed -e 's/ //g' | cut -f1 -d-)
     - echo y | android update sdk --no-ui --filter "android-19"
