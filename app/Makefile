@@ -7,3 +7,7 @@ test:
 clean:
 	find ./src -name "R.java" -type f -delete
 	gradle clean
+
+real-test:
+	find ./src -name "R.java" -type f -delete
+	gradle connectedInstrumentTest
