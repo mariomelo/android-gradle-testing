@@ -1,0 +1,16 @@
+##Customize machine
+machine:
+  java:
+    version: oraclejdk6
+
+## Customize test commands
+test:
+  override:
+    - gradle assemble
+    - make test
+
+deployment:
+  staging:
+    branch: master
+    commands:
+      - gradle assembleDebug
