@@ -12,7 +12,6 @@ public class SimpleTest {
     public void doesNotExplode() throws Exception {
         ToDoItem todoItem = new ToDoItem("Titulo!", null, null, null);
         assertNotNull(todoItem.getTitle());
-        assertNull(todoItem.getTitle());
         assertNull(todoItem.getPriority());
     }
 }
