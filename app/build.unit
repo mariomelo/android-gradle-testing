@@ -38,7 +38,7 @@ test {
     beforeSuite { suite ->
         println "**********************************"
         println "Iniciando testes ${suite}..."
-        new File('./build/source/r').eachDirRecurse{
+        new File('app/build/source/r').eachDirRecurse{
             println it
         }
     }
