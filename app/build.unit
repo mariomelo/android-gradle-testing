@@ -17,7 +17,7 @@ sourceSets {
             srcDir 'src/main/java'
         }
         resources {
-            srcDir 'res'
+            srcDir 'src/main/res'
         }
     }
 }
@@ -32,17 +32,21 @@ jacocoTestReport {
     }
 }
 
-sourceSets.test.runtimeClasspath += files('./build/source/r/debug')
+task copyGeneratedFile(type: Copy) {
+    from 'build/source/r/debug'
+    into 'src/main/java'
+}
 
-test {
-    beforeSuite { suite ->
-        println "**********************************"
-        println "Iniciando testes ${suite}..."
-        new File('app/build/source/r').eachDirRecurse{
-            println it
-        }
+task unit << {
+    tasks.copyGeneratedFile.execute()
+    tasks.test.execute()
+}
+
+unit.doLast{
+    println "Arquivos encontrados:"
+    new File( 'app/src/main/java' ).eachFileRecurse {
+    if(it.name.equals('R.java')) {
+        it.delete()
     }
-    afterSuite { desc, result -> 
-        println "O teste ${desc.name} [${desc.className}] retornou: ${result.resultType}"
-    }
-  }
+}
+}
