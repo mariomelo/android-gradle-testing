@@ -6,7 +6,7 @@ machine:
 dependencies:
   pre:
     - mv ci.properties local.properties
-    
+
 ## Customize test commands
 test:
   pre:

@@ -1,5 +1,6 @@
 apply plugin: "java"
 apply plugin: "jacoco"
+apply plugin: "announce"
 
 repositories {
   mavenCentral()
@@ -24,6 +25,9 @@ sourceSets {
 
 sourceSets.test.output.resourcesDir = sourceSets.test.output.classesDir
 
+
+defaultTasks 'unit'
+
 jacocoTestReport {
     reports {
         xml.enabled false
@@ -37,16 +41,22 @@ task copyGeneratedFile(type: Copy) {
     into 'src/main/java'
 }
 
-task unit << {
-    tasks.copyGeneratedFile.execute()
-    tasks.test.execute()
+task unit (dependsOn: [copyGeneratedFile, test]) << {
+    description 'Runs the unit tests located on src/test/java.'
 }
 
-unit.doLast{
-    println "Arquivos encontrados:"
-    new File( 'app/src/main/java' ).eachFileRecurse {
-    if(it.name.equals('R.java')) {
-        it.delete()
+gradle.taskGraph.afterTask { Task task, TaskState state ->
+    if(task.name == "test"){
+        
+        if(state.failure)
+            announce.announce "Unit tests failed.", "local"
+        else
+            announce.announce "Unit tests passed!", "local"
+
+        new File( 'app/src/main/java' ).eachFileRecurse {
+            if(it.name.equals('R.java')) {
+                it.delete()
+            }
+        }
     }
-}
 }
