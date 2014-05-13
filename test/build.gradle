@@ -1,0 +1,122 @@
+apply plugin: "java"
+apply plugin: "jacoco"
+apply plugin: "announce"
+
+repositories {
+  mavenCentral()
+  maven {url "https://oss.sonatype.org/content/repositories/snapshots/"}
+}
+  
+dependencies {
+    compile 'com.google.android:android:4.1.1.4'
+    compile 'com.google.android:android-test:4.1.1.4'
+    testCompile 'junit:junit:4.11'
+    testCompile 'org.mockito:mockito-core:1.9.5'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir '../app/src/main/java'
+        }
+    }
+    test {
+        java {
+            srcDir '../app/src/test/java'
+        }
+        resources {
+            srcDir '../app/src/test/res'
+        }
+    }
+}
+
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled true
+        html.destination "${buildDir}/jacocoHtml"
+    }
+}
+
+sourceSets.test.output.resourcesDir = sourceSets.test.output.classesDir
+
+defaultTasks 'unit'
+
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled true
+        html.destination "${buildDir}/jacocoHtml"
+    }
+}
+
+task copyGeneratedFile(type: Copy) {
+    outputs.upToDateWhen { false }
+    from '../app/build/source/r/debug'
+    into '../app/src/main/java'
+}
+
+task unit (dependsOn: [copyGeneratedFile, test]) << {
+    description 'Runs the unit tests located on src/test/java.'
+}
+
+test.mustRunAfter copyGeneratedFile
+
+gradle.taskGraph.afterTask { Task task, TaskState state ->
+    if(task.name == "test"){
+        
+        def buildMessage
+        if(state.failure)
+            buildMessage =  "Unit tests failed :(\n\r"
+        else
+            buildMessage =  "Unit tests passed! :D\n\r"
+
+        jacocoTestReport.execute()
+
+        buildMessage += getCoverageMessage()
+
+        new File( 'app/src/main/java' ).eachFileRecurse {
+            if(it.name.equals('R.java')) {
+                it.delete()
+            }
+        }
+
+        announce.announce buildMessage, "local"
+    }
+}
+
+def getCoverageMessage() {
+  
+    def isJacocoHeader = true
+    def coveredLines = 0
+    def totalLines = 0
+    println new File(".").getAbsolutePath()
+    new File('test/build/reports/jacoco/test/jacocoTestReport.csv').eachLine{
+      if (!isJacocoHeader){
+        evalLineCoverage it
+        totalLines += getTotalClassLines( it )
+        coveredLines += getCoveredClassLines( it )
+      }
+      isJacocoHeader = false
+    }
+    println "Os testes cobriram $coveredLines linhas de código de um total de $totalLines"
+    "Code coverage: ${ new java.text.DecimalFormat("#.##").format(coveredLines*100/totalLines)}%"
+}
+
+def getTotalClassLines(jacocoCsvLine){
+  def jacocoLine = jacocoCsvLine.split(',')
+  def missedLines = Long.parseLong(jacocoLine[3])
+  def coveredLines = Long.parseLong(jacocoLine[4])
+  coveredLines + missedLines
+}
+
+def getCoveredClassLines(jacocoCsvLine){
+  def jacocoLine = jacocoCsvLine.split(',')
+  def coveredLines = Long.parseLong(jacocoLine[4])
+  coveredLines
+}
+
+def evalLineCoverage(jacocoCsvLine){
+  getCoveredClassLines( jacocoCsvLine ) / getTotalClassLines( jacocoCsvLine )
+}

@@ -21,11 +21,11 @@ public class ToDoItem {
 		NOTDONE, DONE
 	};
 
-	public final static String TITLE = "title";
+	public final static String TITLE = "title ";
 	public final static String PRIORITY = "priority";
 	public final static String STATUS = "status";
 	public final static String DATE = "date";
-	public final static String FILENAME = "filename";
+	public final static String FILENAME = "filename errado";
 
 	public final static SimpleDateFormat FORMAT = new SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss", Locale.US);
@@ -103,8 +103,7 @@ public class ToDoItem {
 	}
 
 	public String toString() {
-		return mTitle + ITEM_SEP + mPriority + ITEM_SEP + mStatus + ITEM_SEP
-				+ FORMAT.format(mDate);
+		return mTitle;
 	}
 
 	public String toLog() {
