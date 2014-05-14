@@ -15,11 +15,11 @@ test:
     - echo y | android update sdk --no-ui --filter "android-19"
 
   override:
-    - gradle assemble
-    - make test
+    - gradle tdd
 
   post:
-    - mv app/build/reports $CIRCLE_ARTIFACTS/reports
+    - mv test/build/jacocoHtml $CIRCLE_ARTIFACTS/reports/coverage
+    - mv test/build/reports/tests $CIRCLE_ARTIFACTS/reports/unit-tests
 
 deployment:
   staging:
