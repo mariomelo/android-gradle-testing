@@ -100,7 +100,7 @@ def getCoverageMessage() {
       }
       isJacocoHeader = false
     }
-    println "Os testes cobriram $coveredLines linhas de código de um total de $totalLines"
+    println "$coveredLines covered lines from a total of $totalLines evaluated lines"
     "Code coverage: ${ new java.text.DecimalFormat("#.##").format(coveredLines*100/totalLines)}%"
 }
 

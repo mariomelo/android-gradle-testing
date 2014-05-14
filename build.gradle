@@ -2,11 +2,9 @@
 buildscript {
     repositories {
         mavenCentral()
-        maven { url 'http://bluepapa32.github.io/maven/' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:0.9.+'
-        classpath 'com.bluepapa32.gradle.plugins:gradle-watch-plugin:0.1.1' 
     }
 }
 
@@ -16,12 +14,6 @@ allprojects {
     }
 }
 
-apply plugin: 'watch'
-defaultTasks 'watch'
-
-watch {
-    java {
-        files fileTree(dir: 'app/src', exclude: '**/R.java')
-        tasks 'compileDebugJava', 'unit'
-    }
+task tdd (dependsOn: [':app:compileDebugJava', ':test:unit']) << {
+    println "All unit tests were executed."
 }
