@@ -18,8 +18,11 @@ test:
     - gradle tdd
 
   post:
-    - mv test/build/jacocoHtml $CIRCLE_ARTIFACTS/reports/coverage
-    - mv test/build/reports/tests $CIRCLE_ARTIFACTS/reports/unit-tests
+    - ls
+    - ls test
+    - ls test/build
+    - mv test/build/jacocoHtml $CIRCLE_ARTIFACTS/coverage
+    - mv test/build/reports/tests $CIRCLE_ARTIFACTS/tests
 
 deployment:
   staging:
